@@ -1,0 +1,3 @@
+- [x] edit favicon
+- [x] google analytics
+- [x] jsdeliver connect

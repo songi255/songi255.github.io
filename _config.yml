@@ -47,7 +47,7 @@ social:
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
 
-google_site_verification: vb50xIqBDMfvkDYZYJnoYJaSB8shDm8anMAQ0QAysPY # fill in to your verification string
+google_site_verification: 84lr7Q7qrmCcDqwmTseCVpkhnFE3mE7liX5T6PrLxgc # fill in to your verification string
 
 # ↑ --------------------------
 # The end of `jekyll-seo-tag` settings
@@ -77,10 +77,10 @@ theme_mode: # [light|dark]
 # will be added to all image (site avatar & posts' images) paths starting with '/'
 #
 # e.g. 'https://cdn.com'
-img_cdn:
+img_cdn: # https://cdn.jsdelivr.net/gh/songi255/songi255.github.io@master
 
 # the avatar on sidebar, support local or CORS resources
-avatar: /assets/img/temp-avatar.png
+avatar: /assets/img/coco.jpg
 
 # boolean type, the global switch for TOC in posts.
 toc: true
@@ -197,3 +197,26 @@ jekyll-archives:
   permalinks:
     tag: /tags/:name/
     category: /categories/:name/
+
+# ------------ jekyll-compose settings ---------------------
+jekyll_compose:
+  auto_open: true
+  default_front_matter:
+    drafts:
+      description:
+      img_path:
+      image:
+      categories: [TOP_CATEGORIE, SUB_CATEGORIE]
+      tags: [TAG] # TAG names should always be lowercase
+    posts:
+      description:
+      image: # preview image on post
+        lqip: # /path/to/lqip-file # or base64 URI : low quality image placeholder(fast load)
+        path: # img_path applied
+        alt: # image Alt text
+      img_path: # prefix path of all images on post
+      pin: false # pin post on top
+      categories: # [TOP_CATEGORIE, SUB_CATEGORIE]
+      tags: # [TAG] # TAG names should always be lowercase
+      published: false
+      sitemap: false
