@@ -20,7 +20,7 @@ timezone: Asia/Seoul
 
 title: Davelog # the main title
 
-tagline: Log for my dev # it will display as the sub-title
+tagline: Logs for my dev # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
   Dave Shin's blog
@@ -77,7 +77,7 @@ theme_mode: # [light|dark]
 # will be added to all image (site avatar & posts' images) paths starting with '/'
 #
 # e.g. 'https://cdn.com'
-img_cdn: # https://cdn.jsdelivr.net/gh/songi255/songi255.github.io@master
+img_cdn: https://cdn.jsdelivr.net/gh/songi255/songi255.github.io
 
 # the avatar on sidebar, support local or CORS resources
 avatar: /assets/img/coco.jpg

@@ -1,4 +1,2 @@
-- [ ] edit favicon
 - [ ] google analytics
-- [ ] google search-console
-- [ ] jsdeliver connect
+- [ ] google search-console check
