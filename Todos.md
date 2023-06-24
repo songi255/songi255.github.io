@@ -1,3 +1,4 @@
-- [x] edit favicon
-- [x] google analytics
-- [x] jsdeliver connect
+- [ ] edit favicon
+- [ ] google analytics
+- [ ] google search-console
+- [ ] jsdeliver connect
