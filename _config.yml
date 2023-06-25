@@ -205,16 +205,20 @@ jekyll_compose:
     drafts:
       description:
       img_path:
-      image:
-      categories: [TOP_CATEGORIE, SUB_CATEGORIE]
-      tags: [TAG] # TAG names should always be lowercase
-    posts:
-      description:
       image: # preview image on post
         lqip: # /path/to/lqip-file # or base64 URI : low quality image placeholder(fast load)
         path: # img_path applied
         alt: # image Alt text
+      pin: false # pin post on top
+      categories: # [TOP_CATEGORIE, SUB_CATEGORIE]
+      tags: # [TAG] # TAG names should always be lowercase
+    posts:
+      description:
       img_path: # prefix path of all images on post
+      image: # preview image on post
+        lqip: # /path/to/lqip-file # or base64 URI : low quality image placeholder(fast load)
+        path: # img_path applied
+        alt: # image Alt text
       pin: false # pin post on top
       categories: # [TOP_CATEGORIE, SUB_CATEGORIE]
       tags: # [TAG] # TAG names should always be lowercase
