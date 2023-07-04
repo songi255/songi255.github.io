@@ -8,6 +8,6 @@ image:
   path:
   alt:
 pin: false
-categories:
+categories: [Language, JavaScript]
 tags:
 ---

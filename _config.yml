@@ -23,7 +23,7 @@ title: Davelog # the main title
 tagline: Logs for my dev # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
-  Dave Shin's blog
+  Dave's blog
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
 url: "https://songi255.github.io"
@@ -204,7 +204,7 @@ jekyll_compose:
   default_front_matter:
     drafts:
       description:
-      img_path:
+      img_path: /assets/img
       image: # preview image on post
         lqip: # /path/to/lqip-file # or base64 URI : low quality image placeholder(fast load)
         path: # img_path applied
@@ -214,7 +214,7 @@ jekyll_compose:
       tags: # [TAG] # TAG names should always be lowercase
     posts:
       description:
-      img_path: # prefix path of all images on post
+      img_path: /assets/img # prefix path of all images on post
       image: # preview image on post
         lqip: # /path/to/lqip-file # or base64 URI : low quality image placeholder(fast load)
         path: # img_path applied
