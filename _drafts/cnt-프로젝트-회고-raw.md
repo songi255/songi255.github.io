@@ -41,12 +41,33 @@ Agile. 확장성
 - dao? useStorage!
 
 use storage? proxy!
+추상화 : 큰 의미가 없다.
+
+fileSystem : menifest 3 이 되면서 deprecated 되었다.
+
+localStorage vs Indexed Storage
+local이 사용하기 더 편함
+sync를 위해서 어차피 stringify는 한다.
+indexed 는 속도가 느리다.
+용량제한 어차피 없다.
+XSS 뚫리면 접근가능한거 어차피 똑같다.
+chrome extension은 크롬에 종속적
+보안? 몇가지 공격 포인트들이 있는데, 그건 사용자가 조심해야 함...
+그리고 XSS는 대부분 chrome에서 막을 수 있다.
+
+어차피 sync storage 대신 다른 sync 대안을 생각해봐야한다면, 큰 의미 없다.
+onChanged 지원한다! sync logic도 편하다. proxy 쓸 필요도 없다.
+
+결론 : 그냥 localStorage를 종속적으로 쌩으로 쓰는게 맞다고 판단했다.
 
 2. 동기화 문제
 
 - sync storage? synchronizer!
 
 3. plugin system
+
+fileSystem 이 안된다.
+남은 대안은 localStorage에 fetch하여 저장 후, 파일로 바꿔서 읽어들이는것...
 
 4. dependency? 글쎼.
 
