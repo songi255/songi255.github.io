@@ -54,4 +54,11 @@ Service vs Thread
   하지만 외부 라이브러리와 연결할 수도 있고... 난 model의 독립성을 사용하고 싶었다.
   Platform.runlater 가 괜히 있는 것이 아니다. 비용은 들지만, 일단 사용해보고 큰 문제가 생기면 최적화하자.
 
+Service BugFix
+
+- Service는 javafx Application Thread 에서 조작해야 함.
+- 그렇게 하면 javafx concurrent Thread Pool 에서 실행해줌.
+- 그래서 concurrent Thread 에서 실행하면 먹통이었던 것.
+- Log가 찍히지 않은 것은 logger binding 문제인듯함.
+
 최적화
