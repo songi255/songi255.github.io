@@ -53,6 +53,9 @@ Service vs Thread
 - onAction 등의 handler와의 연결을 위한 것이다...
   하지만 외부 라이브러리와 연결할 수도 있고... 난 model의 독립성을 사용하고 싶었다.
   Platform.runlater 가 괜히 있는 것이 아니다. 비용은 들지만, 일단 사용해보고 큰 문제가 생기면 최적화하자.
+  Service 내부적으로 fireEvent라던가, updateProgress 등은 모두 platform.runlater 를 사용한다. service실행은 application thread 만 할 수 있고, 실제 task는 worker thread에서 실행되기 때문이다.
+  아키텍쳐도 결국, gui update를 담당하는 application thread 에서 update 할 때, concurrence 를 보장해야 하므로, command pattern 으로 처리될 것...(자세한 내용은 찾아보도록 하자...)
+  worker thread는 javafx 내부적으로 worker thread pool 을 만들어서 할당하는 듯 하다. 그래서 기존에 있는 thread pool 을 활용하는 느낌으로 사용하자.
 
 Service BugFix
 
@@ -60,5 +63,9 @@ Service BugFix
 - 그렇게 하면 javafx concurrent Thread Pool 에서 실행해줌.
 - 그래서 concurrent Thread 에서 실행하면 먹통이었던 것.
 - Log가 찍히지 않은 것은 logger binding 문제인듯함.
+  - reflections Maven Repository 에서 slf4j 구버전 사용확인...
 
 최적화
+
+총평
+솔직히 조금 실망스럽다. hello world 프로그램 하나에도 너무 많은 리소스가 소요된다.
