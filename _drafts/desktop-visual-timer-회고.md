@@ -5,7 +5,7 @@ description:
 img_path: "/assets/img/timetimer"
 image:
   lqip:
-  path:
+  path: timetimer_unsplash.jpg
   alt:
 pin: false
 categories: [Project, Desktop Visual Timer]
@@ -27,9 +27,11 @@ _Time Timer - Google Timer 로도 불린다._
 
 하지만 타이머를 매번 들고다닐 수는 없어서 Desktop 프로그램이 필요했다. 컴퓨터 작업에 방해가 되지 않아야 했는데, 투명하게 오버레이되는 것이 적절해보였다. 하지만 github에서도 그런 앱은 찾지 못했기에 직접 만들기로 했다.
 
+<br/>
+
 아직 Alpha 버전이긴 하지만 결과물은 아래와 같다.
 
-![Timer sample video](timer_sample.mp4)
+{% include embed/youtube.html id='UOKJVtFY21U' %}
 
 다소 간단해 보이는 이 타이머 프로그램을 만들기 위해 어떤 과정들을 거쳤는지 시리즈를 통해 공유하고자 한다.  
 소스코드는 [Github](https://github.com/songi255/focus-timer) 에서 확인할 수 있다.
