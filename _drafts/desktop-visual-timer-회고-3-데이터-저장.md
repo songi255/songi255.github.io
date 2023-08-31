@@ -2,11 +2,11 @@
 layout: post
 title: Desktop Visual Timer 회고 3 - [데이터 저장]
 description:
-img_path: "/assets/img"
+img_path: "/assets/img/timetimer"
 image:
   lqip:
-  path:
-  alt:
+  path: timetimer_unsplash.jpg
+  alt: Time Timer - Unsplash의 Ralph Hutter
 pin: false
 categories: [Project, Desktop Visual Timer]
 tags:
