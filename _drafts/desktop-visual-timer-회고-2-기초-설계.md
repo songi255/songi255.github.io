@@ -74,12 +74,38 @@ javafx랑 호환이 잘 되니까. 어차피 JavaFX를 쓰기도 하고, 이 객
 
 ## 3. Singleton Container
 
-이제 수명주기에 대해 생각해보면, Model들이 계속 새로 생성되야 할 필요가 있을까?
+이제 객체간 연결에 대해 생각해보자.
 MVVM 모델에서는 Model - ViewModel간 관계가 1:1만 있는 것이 아니다. 엮이고 엮인다. 특히 나같은 Component식 개발에서는 더욱.
-그러면 동일 Model 객체를 넣어주는것도 일이다.
+그러면 동일 Model 인스턴스를 넣어주는것도 일이다.
 
 모델들은 이제 서로 observer 등을 통해 협력하게 된다.
-또한 view 계층들도
+또한 view 계층들도 다양한 모델들을 가져와서 사용하게 될 것이다.
+JavaFX는 어떤 Page가 load될 때마다 Controller가 생성된다. 그때마다 넣어줘야 한다.
 
-Assembler를 사용해서 DI 구현...
-Guice나 ~~등을 사용해도 됨. 심지어 Spring Container를 DI용도로만 사용하는 경우도 봤음.
+이런 경우 Singleton으로 작성하는게 좋다.
+하지만, 꼭 모든 객체가 Singleton일 필요는 없다. 코드도 길어질 뿐더러 관리도 귀찮다.
+이런 경우 Singleton Container 클래스를 만들어, Model들을 여기서 관리하도록 하면 단 1개의 Singleton 만으로도 제어가 가능하다.
+
+Controller에서는 이 Singleton Container를 얻어서 종속성을 얻는다.
+
+Container 초기화 단계에서는 Model간 종속성을 엮어줘야 하는데, Assembler 라는 클래스를 별도로 분리해서 책임을 전가할 수 있다.
+
+## 4. DI 도입
+
+하지만 Assembler만으로 DI를 제어하는 것은 몇가지 문제가 있었다.
+첫번째로 Model이 하나 늘어날 때 마다 적어야 할 코드는 더 많아진다.
+또한 설계가 변경되는 경우 계속해서 수정해야 한다.
+그리고 순환참조 문제로 setter를 사용해야 한다. 즉, final 을 사용하지 못한다.
+
+결국 DI를 도입하기로 했다. 제일 먼저 떠오른 건 Spring Context였지만 Guice를 선택했다.
+이유는 Spring Context는 Spring Portfolio들과의 연동을 염두에 두고 설계된 거라 조금 무거울 것 같아서였고,
+Guice또한 구글에서 만든 검증된 라이브러리였고, lifecycle지정, AOP까지 지원을 하는 것을 확인했기 때문이다.
+참고로 둘 다 Proxy 방식이고, JSR330을 준수한다.
+Guice를 사용해 본 결과, 기능면에서 둘 중 뭘 쓰나 큰 차이는 없었다.
+오히려 DB로 바꾸고 싶다면 Spring Data를 도입해서 더 나을수도 있었을 것...
+
+Spring의 사용경험을 토대로 Bean, Component 등을 용도에 맞게 나누었다. (JavaFX Service 이해부족 이슈)
+
+Guice는 Component Scan을 지원하지 않는다. (라이브러리 철학과 관련이 있다.) 그래서 Reflection Module 을 직접 작성해야 했다.
+
+그렇게 Guice를 도입하고 난 후 변경사항을 조금 더 편하게 변경할 수 있었다.
