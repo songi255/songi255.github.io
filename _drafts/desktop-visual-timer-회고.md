@@ -2,7 +2,7 @@
 layout: post
 title: Desktop Visual Timer 회고
 description:
-img_path: "/assets/img"
+img_path: "/assets/img/timetimer"
 image:
   lqip:
   path:
@@ -12,10 +12,9 @@ categories: [Project, Desktop Visual Timer]
 tags:
 ---
 
-Time timer 라는 제품이 있다. Google
+![Time timer](timetimer.jpg)
 
-![Desktop View](timetimer.jpg)
-(사진)
+Time timer 라는 제품이 있다. Google Timer로도 불리는데,
 
 꽤 단순해 보이는 이 타이머는 한번 슬쩍 보는것 만으로도 시간이 얼마나 남았는지 알 수 있다.
 인간은 시각적 요소를 처리하는 능력이 굉장히 띄어나기 때문에, 글자와 그래프는 생각보다 큰 차이가 있다.
