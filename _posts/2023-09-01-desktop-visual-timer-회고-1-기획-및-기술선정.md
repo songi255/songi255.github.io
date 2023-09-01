@@ -9,11 +9,12 @@ image:
   alt: Time Timer - Unsplash의 Ralph Hutter
 pin: false
 categories:
-- Project
-- Desktop Visual Timer
+  - Project
+  - Desktop Visual Timer
 tags:
 date: 2023-09-01 18:46 +0900
 ---
+
 처음에는 단순한 desktop 용 visual timer가 필요했다. 하지만 직접 만들 생각을 하고나니 부가적인 기능들이 떠올랐다.
 
 - 여러 타이머 **설정값 템플릿**을 지원하면 어떨까?
@@ -75,6 +76,7 @@ build 도구는 **Maven**을 사용했다. 단순히 gradle 보다 익숙했기 
 모든걸 다 잘할 순 없다. 그리고 현재 요구사항은 어차피 변경가능성이 많다. 프로토타입이 완벽할 필요는 없는것이다. 나는 디자이너가 아니니, 꽤 쓸만하다 싶어지면 아는 디자이너 형님에게 부탁해보기로 하고 처음 떠올렸던 핵심 이미지만 담았다.
 
 ![Figma 디자인](figma.png)
+_Figma 디자인 초안_
 
 그렇게 프로토타입의 초기 이미지가 완성되었다. 노트에 끄적거린 후 **Figma**를 사용하였다.
 
@@ -85,6 +87,7 @@ build 도구는 **Maven**을 사용했다. 단순히 gradle 보다 익숙했기 
 [Material UX Research](https://material.io/blog/motion-research-container-transform)에 따르면, 컨테이너 전환 애니메이션은 단순히 눈의 즐거움 이상의 중요성을 가진다. 바로 어플리케이션을 사용하는 맥락이 무의식적으로 유지된다는 것이다.
 
 ![Context UX](context_ux.gif)
+_Container Transition_
 
 그래서 처음부터 위와 같은 **Container Transition**은 필수요소였다. 추가적으로 드래그로 위치 옮기기 외에 다른 세부적인 사항은 경험이 부족하므로 해당 시점에서는 고려하지 않았다.
 
