@@ -11,7 +11,7 @@ run local server
 $ bundle exec jekyll s (serve)
 
 # see also draft posts
-$ bundle exec jekyll s --draft
+$ bundle exec jekyll s --draft --livereload
 ```
 
 # Jekyll-Compose
