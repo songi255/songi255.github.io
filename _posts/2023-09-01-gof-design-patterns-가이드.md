@@ -8,11 +8,12 @@ image:
   alt: preview image
 pin: false
 categories:
-- Architecture
-- GoF Design Patterns
+  - Architecture
+  - GoF Design Patterns
 tags:
 date: 2023-09-01 23:33 +0900
 ---
+
 **OOP 언어**로 프로그램을 제작해 본 적이 있다면, Class를 설계하고 조립하는 과정에서 많은 시행착오를 겪었을 것이다.
 특히 **기능을 확장**하거나 **특정한 로직을 작성**할때 자주 경험하게 된다.
 
@@ -74,7 +75,9 @@ _Refactoring Guru 사이트_
 
 ---
 
-> **"일반적으로 패턴의 필요성은 개발자가 추상화 수준이 부족한 프로그래밍 언어나 기술을 선택했을 때 발생합니다."** - Refactoring Guru : 패턴에 대한 비판
+> **"우리가 언제나 완전히 다른 문제들을 해결하는 것 같지만, 우리가 푸는 문제 대다수는 사용하는 도구에 의해 생기는 것이지 직면한 외부의 문제 때문에 생기는 것이 아니다."** - Alexander, Christopher
+
+위 문장은 패턴에 대한 주요한 통찰 중의 하나이다. 단지 프로그래밍 언어, 프레임워크의 미비한 지원기능에 대한 임시방편일 뿐, 언제나 변하지 않는 철칙같은것은 아니라는 뜻이다.
 
 **Observer 패턴**의 예시를 보자. 카탈로그에 나와있는 대로 코드로 구현하면 어떻게 될까?
 
@@ -188,9 +191,18 @@ target.addListener(num -> {
 ...
 ```
 
-Java가 진화함에 따라 훨씬 깔끔한 구현이 가능해진 것을 볼 수가 있다.
+Java가 진화함에 따라 훨씬 깔끔한 구현이 가능해진 것을 볼 수가 있다. 만약 Observer 기능을 지원하는 언어나 프레임워크가 있다면 애초에 이 패턴은 필요가 없을 것이다. 실제로 GUI 프레임워크인 JavaFX에서는 Property 라는 Class를 지원하는데, primitive type의 wrapper 느낌이지만 곧바로 listener 를 붙일 수 있다.
 
-이런 것은 GoF 에만 해당되는 이야기가 아니다. **DI 패턴**을 구현한 Google의 [Guice 라이브러리 문서](https://github.com/google/guice/wiki)에는 Java가 마땅히 제공해야 할 기능의 누락을 채워준다고 표현하고 있다. 즉, 다양한 패턴들은 언젠가는 구식이 될 수도 있으며, 절대적인 수칙이 아니다.
+{: file='Main.java'}
+
+```java
+IntegerProperty num = target.getNum();
+num.addChangeListener((observable, oldValue, newValue) -> {
+  ...
+})
+```
+
+이런 것은 GoF 에만 해당되는 이야기가 아니다. **DI 패턴**을 구현한 Google의 [Guice 라이브러리 문서](https://github.com/google/guice/wiki)에는 Java가 마땅히 제공해야 할 기능의 누락을 채워준다고 표현하고 있다. 즉, 다양한 패턴들은 환경에 따라 필요여부가 결정되며, 절대적인 수칙이 아니다.
 
 {: .prompt-info}
 

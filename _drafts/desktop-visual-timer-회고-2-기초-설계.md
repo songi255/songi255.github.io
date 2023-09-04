@@ -12,77 +12,145 @@ categories: [Project, Desktop Visual Timer]
 tags:
 ---
 
-우선 진행과정에 특수성이 있다.
+핵심화면은 그려봤으니(그래봤자 1개 뿐이지만) 그걸 토대로 프로토타입을 구현해보면 될 듯 하다. 먼저 기반이 될 베이스 코드들을 작성해보았다. 아래 글들은 JavaFX의 기본적인 지식이 필요하다.
 
-1. 다른 일을 하면서 사이드 프로젝트가 가능할까? 를 시험해보고 싶었다.
-2. 혼자 진행했다.
-3. 기획이 명확하지 않다. 언제든지 수정될 수 있다.
-4. 소스는 공개해서, 마음에 안드는 부분을 뜯어보게 하고 싶었다.(오픈소스) 아이템 자체도 나쁘지 않다고 생각했기에... 혹시 나중에 함께 하고자 하는 사람이 있다면 같이 하고 싶었다.
+## 1. 코드스타일 및 전체구조
 
-이 때문에 몇가지 전략이 취해졌다.
+### 1-1. Component 형식 개발
 
-git은 따로 branching 하지 않았다. 적어도 프로토타입 이후에 내놓을 것이었기 때문에.
-component 형식 개발을 의도했다. 이건 내가 React를 사용했던 경험때문이기도 하다.
+디자인이나 기획이 불안정했기에 Component방식 개발을 생각했다. 처음에 FXML을 사용해야겠다고 생각했기 때문에 FXML에서 include를 지원하는지 찾아보았고, 실제로 지원하는 것을 확인할 수 있었다.
 
-검색결과, fxml에서 include 를 지원하는 것을 확인하였고, 그렇게 시작했다.
+코드를 구성한다면 아래와 같이 web(React.js)에서 쓰던 것 처럼 사용할 수 있다. `fx:id`의 reference는 해당 Component의 Parent(Root)가 할당된다.
 
-## 1. 아키텍처 분석
+{: file='main.fxml'}
 
-우선 JavaFX 프레임워크의 아키텍처를 가볍게라도 보고 갈 필요가 있다.
+```xml
+<AnchorPane fx:id="mainPage" ...>
+  ...
+  <fx:include fx:id="header" source="components/header.fxml" ...>
+  <fx:include fx:id="main" source="components/header.fxml" ...>
+  ...
+</AnchorPane>
+```
 
-JavaFX는 MVVM 패턴을 사용하는데 대략적인 설명은 ~~와 같다.
+<br/>
 
-처음부터 완벽한 아키텍처가 나오기는 힘들다.
-아무리 경력있는 아키텍트라도 ~~~~. DDD 책에서 나온 말이다.
-심지어 내가 경력이 있는것도 아니고, 이런 경우에는 역시 둘 사이에서 잘 조율해서 진행해야 한다. 부딧혀봐야한다.
-프로토타입을 먼저 만들도록 하자.
+스타일링은 CSS로 하기로 했으므로[^fn-nth-1], class 지원여부와 JavaFX특화 문법은 없는지, Cascade가 제대로 적용되는지 등을 점검해보았다.
 
-다만, MVVM패턴이 기반이므로, 기반이 되는 Model을 잘 짜놓으면 기획 등이 변경이 되어도 큰 타격은 면할 것이다.
+`-fx-` 접두사가 붙은 특성이 존재함을 확인했으며, `-` 및 다중클래스도 잘 작동하였고 Cascade도 잘 작동하였다.
 
-## 2. Model 설계
+{: file='ex.fxml'}
 
-확정된 기획은 아니지만, 대표적인 요구사항을 다시 떠올려보자.
+```xml
+...
+<Button styleClass="btn btn-green"/>
+...
+```
 
-1.
-2.
-3.
-4.
+{: file='ex.css'}
 
-그러면 Timer, Template, Notifier, Player 등등... 다양한 모델들이 떠오른다.
-하지만 요구사항이 명확하지 않은 지금같은 시점에서는 모든 모델의 협력을 다 설계할 수는 없다. (기획이 바뀌면 언제 무용지물이 될지 모르니까.)
+```css
+btn {
+  -fx-border-color: none;
+}
 
-이런 경우, 변할 가능성이 가장 적은 핵심기능인 Timer 모델부터 만들어보는 것이 합리적이다.
-기본적인 props를 정의하고, observer를 달아주자! 다양한 변화에 대응할 수 있다.
+btn-green {
+  -fx-background-color: "green";
+}
+```
 
-이제 다른 Model 확장 시 문제가 없을 지를 한번 생각해보면, 큰 문제는 예상되지 않는다!
+### 1-2. 패키지 구조
 
-observer 구현은 몇가지 디자인이 있었다.
+패키지 구조는 다음과 같은데, 특이할 수도 있는 점은 java 폴더안에 FXML과 CSS가 같이 있다는 것이다.
 
-1. Listner Interface
-2. callback
-3. JavaFX 기본 제공 Property객체 사용하기
+```bash
+├── java
+│   ├── components
+│   │   ├── headerBar
+│   │   └── timerDiskView
+│   │      ├── timerDiskView.fxml
+│   │      ├── timerDiskView.css
+│   │      └── timerDiskViewController.java
+│   ├── pages
+│   ├── config
+│   ├── models
+│   └── utils
+└── resources
+    ├── icons
+    └── fonts
 
-기존에는 1번방식으로 했는데,
-생각보다 listner 달 일이 많았고
-코드가 더러워졌고
-변경사항이 많았다.
+```
 
-결과적으로 글을 쓰는 지금 시점에서는 property를 사용하는것이 적절했다고 생각하며, 리팩토링 예정이다.
-이유는 생각보다 단순 bind 가 필요한 경우가 꽤 있었고
-listner 달기가 쉬웠고
-javafx랑 호환이 잘 되니까. 어차피 JavaFX를 쓰기도 하고, 이 객체가 너무 무거워서 성능에 문제가 될 일은 없을텐데, 잘못 생각했었다.
+이는 React 사용경험에서 비롯되었는데, 어차피 ViewModel과 View계층은 꽤 밀접하게 연결되있어서 View가 변하면 ViewModel도 변해야 하는 경우가 잦다.
+또한 특정 Component에 문제나 수정사항이 있을경우, 관심사가 한곳에 모여있어 확인하기 훨씬 편하다.
+
+다만 Maven은 java 폴더안의 `.java`파일 외에는 무시해버리므로 `pom.xml`에서 해당 리소스들을 옮기는 처리[^fn-nth-2]를 해주어야 한다.
+
+{: file='pom.xml'}
+
+```xml
+<build>
+    <resources>
+        <resource>
+            <directory>src/main/java</directory>
+            <includes>
+                <include>**/*.fxml</include >
+                <include>**/*.css</include >
+            </includes>
+        </resource>
+        <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*.*</include >
+            </includes>
+        </resource>
+    </resources>
+
+    ...
+</build>
+```
+
+{: .prompt-warning}
+
+> 처음 시점에서 FXML, CSS를 사용하기로 결정했다는 것이지, 실제로는 둘 다 사용하지 않고 코드로 제어하는 것을 추천한다. 실제로는 여러 문제점이 있었고 이어지는 포스팅에 작성예정이다.
+
+## 2. 핵심모델만 우선설계
+
+우선 JavaFX 프레임워크는 MVVM 패턴을 사용하는데 이에 대한 설명은 생략한다. 다만 MVVM이므로 근간이 되는 Model은 먼저 독립적으로 개발할 수 있음을 알 수 있다. 그리고 Model이 프로그램 전체의 기반이 되므로, 이를 먼저 만드는 것이 현명하다.
+
+조금 보충하자면 View와 ViewModel은 Model을 사용하기 위한 껍데기일 뿐이라고 생각하면 된다. Model은 그 껍데기와 독립적이어서 JavaFX와 독립적으로 개발될 수 있다. 이는 만들어진 Model을 그대로 사용해서 CLI 프로그램도 만들 수 있어야 한다는 뜻이다.
+
+다시 본론으로 돌아와서, 구현할 기능에는 Timer, Template, Notifier, Music Player, Todos 등이 있으며, 언제든지 변경될 수 있다.
+Template는 Store 계층과 관련이 있으므로 다음 포스팅에 작성한다. 사실 지금 상황에서 Model끼리 복잡하게 얽힌 상황은 딱히 없고, 대부분 독립적이다.
+
+- Notifier는 Timer가 멈춘 시점부터 Scheduling 하면 끝이다.
+- Music Player는 Timer가 돌고있을때 작동하면 된다.
+- Todos 같은건 애초에 독립적이다.
+
+따라서 Timer에 Observer를 붙여주는 것 만으로 확장문제까지 해결할 수 있다. Template으로 인한 데이터주입문제는 다음 포스팅에서 다룬다.
+나머지 모델들은 핵심기능이 아니고, 크게 문제될 것이 예상되지 않아 이 시점에서 고려하지 않았다.
+
+이제 Timer 구현을 보자.
 
 ## 3. Singleton Container
 
-이제 객체간 연결에 대해 생각해보자.
-MVVM 모델에서는 Model - ViewModel간 관계가 1:1만 있는 것이 아니다. 엮이고 엮인다. 특히 나같은 Component식 개발에서는 더욱.
-그러면 동일 Model 인스턴스를 넣어주는것도 일이다.
+이제 객체 간 연결에 대해 생각해보자.
+MVVM 모델에서는 Model - ViewModel간 관계가 N:1인 경우가 많다. 특히 지금같은 Component식 개발에서는 더욱 심해진다.
 
-모델들은 이제 서로 observer 등을 통해 협력하게 된다.
-또한 view 계층들도 다양한 모델들을 가져와서 사용하게 될 것이다.
-JavaFX는 어떤 Page가 load될 때마다 Controller가 생성된다. 그때마다 넣어줘야 한다.
+![component](component.png)
+_Timer Model의 값을 현재는 2개의 컴포넌트가 사용한다._
 
-이런 경우 Singleton으로 작성하는게 좋다.
+JavaFX도 결국 IoC라서 FXMLLoader가 fxml을 로딩하고 Controller 생성 및 바인딩까지 한다. 그러면 동일 Model 인스턴스를 넣어주는것도 일이다. 심지어 Model이 하나만 있지도 않다.
+
+이런 경우 Singleton을 떠올릴 수 있는데, 몇가지 고려를 해봐야 한다.
+
+- 객체 생명주기. Model객체가 프로그램 처음부터 끝까지 살아있는 상황이 맞을까? 그리고 그게 메모리에 부담이 되지는 않을까?
+- Model 객체가 1개만 존재하는 상황이 맞을까?
+- MultiThread issue는 없을까?
+
+우선 Timer 여러개를 동시에 돌릴 계획은 없다. 조심할 스레드는 JavaFX 렌더링 스레드(JavaFX Application Thread)가 있다.
+버튼을 클릭등의 handler 호출을 렌더링 스레드가 하기 때문이다.
+
 하지만, 꼭 모든 객체가 Singleton일 필요는 없다. 코드도 길어질 뿐더러 관리도 귀찮다.
 이런 경우 Singleton Container 클래스를 만들어, Model들을 여기서 관리하도록 하면 단 1개의 Singleton 만으로도 제어가 가능하다.
 
@@ -109,3 +177,9 @@ Spring의 사용경험을 토대로 Bean, Component 등을 용도에 맞게 나�
 Guice는 Component Scan을 지원하지 않는다. (라이브러리 철학과 관련이 있다.) 그래서 Reflection Module 을 직접 작성해야 했다.
 
 그렇게 Guice를 도입하고 난 후 변경사항을 조금 더 편하게 변경할 수 있었다.
+
+<br/>
+<hr/>
+
+[^fn-nth-1]: sa
+[^fn-nth-2]: resources 폴더에 있다면 굳이 작성하지 않아도 옮겨준다. Maven은 애초에 Java 코딩 컨벤션에서 파생된 프로젝트여서, resouces 폴더는 기본값설정이 되어있다.

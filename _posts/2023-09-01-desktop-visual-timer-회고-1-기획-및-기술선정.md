@@ -65,8 +65,6 @@ build 도구는 **Maven**을 사용했다. 단순히 gradle 보다 익숙했기 
 
 전문분야는 아니지만 평소 UI/UX 글은 챙겨보고 있었다. 비슷한 처지라면 [Google Material Design System](https://m3.material.io/) 을 참고하면 매우 도움이 된다. 참고로 JavaFX에서도 Material Design 구현을 해놓은 [라이브러리](https://github.com/palexdev/MaterialFX)가 존재한다.
 
-디자인에는 자신이 없었기 때문에 Material Design 을 많이 참고했다.
-
 ### 2-1. UI 디자인
 
 ---
