@@ -31,8 +31,6 @@ date: 2023-09-01 18:46 +0900
 
 ## 🛠️ 1. 기술선정
 
----
-
 ![Tool 사진](tool.jpg)
 _<a href="https://unsplash.com/ko/%EC%82%AC%EC%A7%84/IClZBVw5W5A?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>의<a href="https://unsplash.com/ko/@toddquackenbush?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Todd Quackenbush</a>_
 
@@ -59,28 +57,26 @@ _<a href="https://unsplash.com/ko/%EC%82%AC%EC%A7%84/IClZBVw5W5A?utm_source=unsp
 
 build 도구는 **Maven**을 사용했다. 단순히 gradle 보다 익숙했기 때문이다.
 
-## 🖌️ 2. 디자인
+<br/>
 
----
+## 🖌️ 2. 디자인
 
 전문분야는 아니지만 평소 UI/UX 글은 챙겨보고 있었다. 비슷한 처지라면 [Google Material Design System](https://m3.material.io/) 을 참고하면 매우 도움이 된다. 참고로 JavaFX에서도 Material Design 구현을 해놓은 [라이브러리](https://github.com/palexdev/MaterialFX)가 존재한다.
 
 ### 2-1. UI 디자인
 
----
-
 초기 디자인이 굉장히 힘들었는데, 기능이 많고 모호하다보니 화면을 어떻게 구성해야 할 지 감이 잘 오지 않았다. 설정값 변경방식, 반응형 디자인 같은 세부사항 하나하나가 굉장히 괴로웠다. 그래서 어떻게 해결했냐면, 그냥 포기해버렸다.
 
 모든걸 다 잘할 순 없다. 그리고 현재 요구사항은 어차피 변경가능성이 많다. 프로토타입이 완벽할 필요는 없는것이다. 나는 디자이너가 아니니, 꽤 쓸만하다 싶어지면 아는 디자이너 형님에게 부탁해보기로 하고 처음 떠올렸던 핵심 이미지만 담았다.
 
-![Figma 디자인](figma.png)
+![Figma 디자인](figma.png){: width="600" }
 _Figma 디자인 초안_
 
 그렇게 프로토타입의 초기 이미지가 완성되었다. 노트에 끄적거린 후 **Figma**를 사용하였다.
 
-### 2-2. UX 디자인
+<br/>
 
----
+### 2-2. UX 디자인
 
 [Material UX Research](https://material.io/blog/motion-research-container-transform)에 따르면, 컨테이너 전환 애니메이션은 단순히 눈의 즐거움 이상의 중요성을 가진다. 바로 어플리케이션을 사용하는 맥락이 무의식적으로 유지된다는 것이다.
 

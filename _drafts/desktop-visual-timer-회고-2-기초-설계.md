@@ -130,14 +130,89 @@ Template는 Store 계층과 관련이 있으므로 다음 포스팅에 작성한
 따라서 Timer에 Observer를 붙여주는 것 만으로 확장문제까지 해결할 수 있다. Template으로 인한 데이터주입문제는 다음 포스팅에서 다룬다.
 나머지 모델들은 핵심기능이 아니고, 크게 문제될 것이 예상되지 않아 이 시점에서 고려하지 않았다.
 
-이제 Timer 구현을 보자.
+{: .prompt-info}
+
+> JavaFX와 Model은 독립적으로 개발될 수 있지만, 꼭 그래야 한다는 것은 아니다. Model의 field들은 JavaFX의 Property클래스로 선언하는것이 훨씬 낫다. JavaFX와 통합(바인딩 같은)이 훨씬 쉬워지며 JavaFX가 Event Driven이기 때문에 Listener를 달 일이 꽤 있다. Property를 사용하면 Listener를 쉽게 달 수 있다.
+
+<br/>
+
+Timer 관련 로직은 일반 Thread대신 JavaFX의 Service를 이용하길 권장한다. Service의 소스코드를 보면 JavaFX내부에서 worker thread pool을 독자적으로 생성하여 사용하고 있음을 알 수 있다.
+
+![executor](executor.png)
+_Executor 사용을 확인할 수 있다._
+
+굳이 전용 thread pool[^fn-nth-4]을 사용하고 있는데 따로 생성할 필요는 없다.
+
+<br/>
+
+{: file='TimerService.java'}
+
+```java
+public class TimerService extends Service<Void> {
+    private final TimerModel timerModel;
+    private final static long INTERVAL = (long) (1000.0 / 60.0); // 60fps
+
+    ...
+
+    @Override
+    protected Task<Void> createTask() {
+        return new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                long startTime = System.currentTimeMillis();
+                double startSec = timerModel.getCurTime();
+                double passedTime = 0;
+
+                while (passedTime < startSec) {
+                    passedTime = (System.currentTimeMillis() - startTime) / 1000.0;
+                    timerModel.setCurTime(startSec - passedTime);
+
+                    Thread.sleep(INTERVAL);
+                }
+
+                return null;
+            }
+        };
+    }
+
+    ...
+}
+```
+
+Service에서 고정 Interval이 아닌 JavaFX내부의 pulse timer를 얻어 worker Thread를 제어하는 방법도 생각해볼 수 있다. JavaFX는 기본적으로는 60FPS를 지향하지만, 환경에따라 유동적으로 달라지기 때문이다. 그리고 기존에 Timer관련 로직과 리소스를 사용중인데 굳이 하나 더 만들어 사용할 필요는 없기 때문이다. 하지만 아직 시도해보지는 않았다.
+
+조금 주의할 점은 TimerModel의 Observer Code가 꽤 자주 실행된다는 것이다. 위 코드에서 `timerModel.setCurTime()` 호출 시 Observer들의 `onTimerChanged()` 코드도 전부 실행된다. 그리고 Service작업은 Worker Thread에서 동작하기에, Observer들이 UI를 업데이트하기 위해서 `Platform.runLater()`가 필요하다.
+
+평소라면 다음과 같이 Lambda를 사용할 수 있다.
+
+{: file='Controller.java'}
+
+```java
+Platform.runLater(() -> {
+  ...
+});
+
+// 혹은
+Platform.runLater(this::draw);
+```
+
+하지만 위 코드는 전부 Runnable 익명객체를 생성한다는 것을 기억해야한다. 1회성이 아닌, 초당 60회 지속적으로 Runnable 객체를 생성하는 것은 그렇게 작은 일은 아니다. 따라서 `onTimerChanged()`에 연결된 부분만이라도 따로 Runnable로 빼는 것이 좋아보인다.
+
+{: file='Controller.java'}
+
+```java
+private final Runnable task = this::draw;
+
+@Override
+public void onTimerChanged(){ Platform.runLater(this.task); }
+```
 
 ## 3. Singleton Container
 
 이제 객체 간 연결에 대해 생각해보자.
 MVVM 모델에서는 Model - ViewModel간 관계가 N:1인 경우가 많다. 특히 지금같은 Component식 개발에서는 더욱 심해진다.
 
-![component](component.png)
+![component](component.png){: width="400" height="600" }
 _Timer Model의 값을 현재는 2개의 컴포넌트가 사용한다._
 
 JavaFX도 결국 IoC라서 FXMLLoader가 fxml을 로딩하고 Controller 생성 및 바인딩까지 한다. 그러면 동일 Model 인스턴스를 넣어주는것도 일이다. 심지어 Model이 하나만 있지도 않다.
@@ -178,8 +253,14 @@ Guice는 Component Scan을 지원하지 않는다. (라이브러리 철학과 �
 
 그렇게 Guice를 도입하고 난 후 변경사항을 조금 더 편하게 변경할 수 있었다.
 
+## 레퍼런스
+
+https://edencoding.com/animation-timer-speed/
+
 <br/>
 <hr/>
 
 [^fn-nth-1]: sa
 [^fn-nth-2]: resources 폴더에 있다면 굳이 작성하지 않아도 옮겨준다. Maven은 애초에 Java 코딩 컨벤션에서 파생된 프로젝트여서, resouces 폴더는 기본값설정이 되어있다.
+[^fn-nth-3]: aa
+[^fn-nth-4]: 전용이라함은 thread의 시작과 callback은 Application Thread에서만 실행되게 해서 오용을 방지한다던가, JavaFX에 Event를 발생시킬 수 있다던가, Template가 잘 짜져있다던가 하는 것이다. 물론 이런 사항들을 잘 제어만 해줄 수 있다면 따로 java.util.Timer같은 Thread를 사용한다고 해서 큰 문제는 없다. 공식 Docs에도 나와있는 내용이다.
