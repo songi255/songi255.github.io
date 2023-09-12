@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Desktop Visual Timer 회고 1 - [기획 및 기술선정]
+title: Desktop Visual Timer 작업일지 1 - [기획 및 기술선정]
 description:
 img_path: "/assets/img/timetimer"
 image:

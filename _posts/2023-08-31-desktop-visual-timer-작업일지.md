@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Desktop Visual Timer 회고
+title: Desktop Visual Timer 작업일지
 description: desktop visual timer project 소개
 img_path: "/assets/img/timetimer"
 image:

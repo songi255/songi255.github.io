@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Desktop Visual Timer 회고 2 - [기초 설계]
+title: Desktop Visual Timer 작업일지 2 - [기초 설계]
 description:
 img_path: "/assets/img/timetimer"
 image:
@@ -9,11 +9,12 @@ image:
   alt: Time Timer - Unsplash의 Ralph Hutter
 pin: false
 categories:
-- Project
-- Desktop Visual Timer
+  - Project
+  - Desktop Visual Timer
 tags:
 date: 2023-09-06 17:09 +0900
 ---
+
 핵심화면은 그려봤으니(그래봤자 1개 뿐이지만) 그걸 토대로 프로토타입을 구현해보면 될 듯 하다. 먼저 기반이 될 베이스 코드들을 작성해보았다.
 
 > 아래 글은 JavaFX기본지식이 필요하며, Spring을 사용해 보신 분들에게는 조금은 당연한 이야기들을 담고있습니다.
