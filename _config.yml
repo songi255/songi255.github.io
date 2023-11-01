@@ -20,7 +20,7 @@ timezone: Asia/Seoul
 
 title: Davelog # the main title
 
-tagline: Logs for my dev # it will display as the sub-title
+tagline: Filling the empty spaces on the web # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
   Dave's blog

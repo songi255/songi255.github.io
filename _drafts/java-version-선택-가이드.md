@@ -12,6 +12,8 @@ categories: [Language, Java]
 tags:
 ---
 
+https://en.m.wikipedia.org/wiki/Java_version_history#Java_17
+
 자바8:
 
 람다 표현식
