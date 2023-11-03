@@ -1,0 +1,193 @@
+---
+layout: post
+title: Java 실행중인 함수명 얻기
+description:
+img_path: "/assets/img"
+image:
+  lqip:
+  path:
+  alt:
+pin: false
+categories: [Java, tips]
+tags: Java
+---
+
+Java에서 실행중인 함수명을 얻는 여러 방법을 비교하고 소개합니다.
+각각의 방법은 장단점이 있으니, 상황에 따라 알맞게 사용하길 권장합니다.
+
+요약은 다음과 같습니다.
+
+- 유연함을 원하면 StackTrace를 사용하세요.
+- 간단함과 속도를 원하면 Reflection을 사용하세요.
+
+## 1. StackTrace 사용
+
+StackTrace 방식은 Call Stack 을 추적하기 때문에, 단순히 해당 Method만 얻는 것 이상의 작업을 할 수 있습니다.  
+예를들어, 함수이름 구하는 기능을 Util Class에 static Method 형식으로 정의하거나, 특정 Annotation이 붙은 제일 가까운 메서드를 찾는 등의 작업이 가능합니다.
+
+대신 Reflection에 비해 오버헤드가 발생합니다. 하지만 StackWalker(java9+)를 사용하면 2~3배로 그 차이가 크지 않습니다.
+
+**주의할 점이 있습니다.** 일부 VM은 성능최적화를 위해 스택추적에서 몇몇 프레임을 생략할 수 있습니다. 이런 최적화는 런타임 중 점진적으로 일어나며 예측하기 매우 어렵습니다. 일반적인 상황에서 문제가 될 일은 거의 없으나, 이런 오류가 발생할 수 있음을 분명히 인지하고 있어야 합니다.
+
+### 1-1. StackWalker(java9+) 사용
+
+> **Java9+에서 StackTrace를 사용한다면 이 방법을 사용하세요.**
+
+다른 StackTrace 방법에 비해 월등한 장점을 가집니다.
+
+1. 가장 빠르고 오버헤드가 적습니다. 처음부터 모든 Stack을 추적하지 않고, 필요한 시점에서 탐색하는 Lazy방식이기 때문입니다. 성능차이가 심하며, Call Stack이 깊어질수록 그 차이는 더 심해집니다.
+2. 다양한 편의를 제공합니다. Call Stack 스킵, 필터링, 매핑 등 다양한 Stream API들과 함께 유연한 작업 정의가 가능합니다.
+3. `walk()`는 `Optional`을 반환합니다. `orElseGet()`을 통해 Null에 대한 처리도 편해집니다.
+
+```java
+StackWalker stackWalker = StackWalker.getInstance();
+StackFrame stackFrame = stackWalker.walk(stream -> stream
+                .skip(0)
+                .filter(frame -> {
+                    // do some filter...
+                    return true;
+                })
+                .findFirst())
+                .get();
+
+String methodName = stackFrame.getMethodName();
+```
+
+`StackWalker.getInstance()`은 `Option`을 인자로 받습니다. 이를 통해 `Reflection Class`의 `invoke`를 스킵하는 등 섬세한 튜닝이 가능합니다.
+
+### 1-2. Thread 사용
+
+**Java8 이하버전에서 고려할 수 있습니다.** Thread에서 직접 stackTrace를 구합니다. 항상 모든 StackTrace를 구하기 때문에 성능이 떨어집니다.
+
+```java
+String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+```
+
+### 1-3. Exception 사용
+
+**java8 미만 버전에서 Thread 사용보다 빠르다는 정보가 있습니다.** 하지만 java8+에서는 해당문제가 개선되어 사용할 이유가 없습니다.
+
+```java
+String methodName = new Throwable().getStackTrace()[0].getMethodName();
+```
+
+## 2. Reflection 사용
+
+**가장 간단하고 빠른 방법입니다.** 하지만 익명객체를 이용하기 때문에 해당 함수에 한정된 정보만 사용가능합니다.
+
+런타임에서 익명객체와 Reflection을 이용합니다.
+
+```java
+String methodName = new Object() {}
+                      .getClass().getEnclosingMethod().getName();
+```
+
+## 부록 : 벤치마킹 코드
+
+Java17 correto 환경이며 100번의 워밍업과 10000번의 반복을 통해 추이를 관찰했습니다.
+
+하지만 이런 마이크로벤치마킹은 대부분 큰 의미가 없으며 상황과 사용사례에 따라 달라질 수 있음을 이해해주시길 바랍니다. 자세한 내용은 Java 벤치마킹의 함정 포스트를 참고해주세요.
+
+```java
+import java.lang.StackWalker.Option;
+import java.lang.StackWalker.StackFrame;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class getFunctionNameTest {
+    static final int TEST_REPETITION = 10000;
+    static final int TEST_WARMUP = 100;
+    static long[][] result = new long[4][TEST_REPETITION];
+
+    @AfterAll
+    static void printResult() {
+        String[] testName = {"StackWalker", "Thread", "Throwable", "Reflection"};
+        for (int i = 0; i < 4; i++) {
+            System.out.print(testName[i] + ": [");
+            for (int j = 0; j < TEST_REPETITION; j++) {
+                System.out.print(result[i][j] + ", ");
+            }
+            System.out.println("]");
+        }
+    }
+
+    @RepeatedTest(TEST_WARMUP + TEST_REPETITION)
+    void using_StackWalker(RepetitionInfo info) {
+        long start = System.nanoTime();
+
+        StackWalker stackWalker = StackWalker.getInstance(Option.RETAIN_CLASS_REFERENCE);
+        StackFrame stackFrame = stackWalker.walk(stream -> stream
+                        .skip(0)
+                        .filter(frame -> {
+                            // do some filter...
+                            return true;
+                        })
+                        .findFirst())
+                .get();
+
+        String methodName = stackFrame.getMethodName();
+
+        long end = System.nanoTime();
+        long exeTime = end - start;
+
+        collectResult(info, 0, exeTime);
+        assertThat(methodName).isEqualTo("using_StackWalker");
+    }
+
+    @RepeatedTest(TEST_WARMUP + TEST_REPETITION)
+    void using_Thread(RepetitionInfo info) {
+        long start = System.nanoTime();
+
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        long end = System.nanoTime();
+        long exeTime = end - start;
+
+        collectResult(info, 1, exeTime);
+        assertThat(methodName).isEqualTo("using_Thread");
+    }
+
+    @RepeatedTest(TEST_WARMUP + TEST_REPETITION)
+    void using_Thrown(RepetitionInfo info) {
+        long start = System.nanoTime();
+
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
+        long end = System.nanoTime();
+        long exeTime = end - start;
+
+        collectResult(info, 2, exeTime);
+        assertThat(methodName).isEqualTo("using_Thrown");
+    }
+
+    @RepeatedTest(TEST_WARMUP + TEST_REPETITION)
+    void using_Reflection(RepetitionInfo info) {
+        long start = System.nanoTime();
+
+        Object obj = new Object() {
+        };
+        String methodName = obj.getClass().getEnclosingMethod().getName();
+
+        long end = System.nanoTime();
+        long exeTime = end - start;
+
+        collectResult(info, 3, exeTime);
+        assertThat(methodName).isEqualTo("using_Reflection");
+    }
+
+    void collectResult(RepetitionInfo info, int testNum, long exeTime){
+        if (info.getCurrentRepetition() > TEST_WARMUP) {
+            result[testNum][info.getCurrentRepetition() - TEST_WARMUP - 1] = exeTime;
+        }
+    }
+}
+```
+
+## References
+
+- https://stackoverflow.com/questions/442747/getting-the-name-of-the-currently-executing-method
+- https://openjdk.org/jeps/259
+- https://www.baeldung.com/java-name-of-executing-method
