@@ -1,14 +1,16 @@
 ---
 layout: post
-title: Desktop Visual Timer 작업일지 3 - [데이터 저장]
+title: "Desktop Visual Timer 작업일지 3 - [데이터 저장]"
 description:
 img_path: "/assets/img/timetimer"
 image:
   lqip:
-  path: timetimer_unsplash.jpg
-  alt: Time Timer - Unsplash의 Ralph Hutter
+  path: "timetimer_unsplash.jpg"
+  alt: "Time Timer - Unsplash의 Ralph Hutter"
 pin: false
-categories: [Project, Desktop Visual Timer]
+categories:
+  - Project
+  - Desktop Visual Timer]
 tags:
 date: 2023-09-12 19:54 +0900
 ---

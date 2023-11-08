@@ -1,7 +1,7 @@
 # The Site Configuration
 
 # Import the theme
-theme: jekyll-theme-chirpy
+theme: "jekyll-theme-chirpy"
 
 # Change the following value to '/PROJECT_NAME' ONLY IF your site type is GitHub Pages Project sites
 # and doesn't have a custom domain.
@@ -13,7 +13,7 @@ baseurl: ""
 lang: ko
 
 # Change to your timezone › http://www.timezoneconverter.com/cgi-bin/findzone/findzone
-timezone: Asia/Seoul
+timezone: "Asia/Seoul"
 
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
@@ -38,11 +38,11 @@ social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
   name: Dave Shin
-  email: assert2914@gmail.com # change to your email address
+  email: "assert2914@gmail.com" # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/botrunner1 # change to your twitter homepage
-    - https://github.com/songi255 # change to your github homepage
+    - "https://twitter.com/botrunner1" # change to your twitter homepage
+    - "https://github.com/songi255" # change to your github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
@@ -77,10 +77,10 @@ theme_mode: # [light|dark]
 # will be added to all image (site avatar & posts' images) paths starting with '/'
 #
 # e.g. 'https://cdn.com'
-img_cdn: https://cdn.jsdelivr.net/gh/songi255/songi255.github.io@master
+img_cdn: "https://cdn.jsdelivr.net/gh/songi255/songi255.github.io@master"
 
 # the avatar on sidebar, support local or CORS resources
-avatar: /assets/img/coco.jpg
+avatar: "/assets/img/coco.jpg"
 
 # boolean type, the global switch for TOC in posts.
 toc: true
@@ -96,10 +96,10 @@ comments:
     issue_term: # < url | pathname | title | ...>
   # Giscus options › https://giscus.app
   giscus:
-    repo: songi255/songi255.github.io # <gh-username>/<repo>
-    repo_id: R_kgDOJy9lHQ
+    repo: "songi255/songi255.github.io" # <gh-username>/<repo>
+    repo_id: "R_kgDOJy9lHQ"
     category: Announcements
-    category_id: DIC_kwDOJy9lHc4CXb3m
+    category_id: "DIC_kwDOJy9lHc4CXb3m"
     mapping: pathname # optional, default to 'pathname'
     input_position: # optional, default to 'bottom'
     lang: # optional, default to the value of `site.lang`
@@ -204,7 +204,7 @@ jekyll_compose:
   default_front_matter:
     drafts:
       description:
-      img_path: /assets/img
+      img_path: "/assets/img"
       image: # preview image on post
         lqip: # /path/to/lqip-file # or base64 URI : low quality image placeholder(fast load)
         path: # img_path applied
@@ -214,7 +214,7 @@ jekyll_compose:
       tags: # [TAG] # TAG names should always be lowercase
     posts:
       description:
-      img_path: /assets/img # prefix path of all images on post
+      img_path: "/assets/img" # prefix path of all images on post
       image: # preview image on post
         lqip: # /path/to/lqip-file # or base64 URI : low quality image placeholder(fast load)
         path: # img_path applied
