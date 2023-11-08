@@ -29,4 +29,4 @@ end
 
 
 # jekyll compose (easier to post)
-gem 'jekyll-compose', group: [:jekyll_plugins]
+# gem 'jekyll-compose', group: [:jekyll_plugins]
