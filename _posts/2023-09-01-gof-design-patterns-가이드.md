@@ -7,9 +7,7 @@ image:
   path: gof-pattern-series-preview.png
   alt: preview image
 pin: false
-categories:
-  - Architecture
-  - GoF Design Patterns
+categories: [Architecture, GoF Design Patterns]
 tags:
 date: 2023-09-01 23:33 +0900
 ---

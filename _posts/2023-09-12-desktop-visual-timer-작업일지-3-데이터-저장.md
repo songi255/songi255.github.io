@@ -8,12 +8,11 @@ image:
   path: timetimer_unsplash.jpg
   alt: Time Timer - Unsplash의 Ralph Hutter
 pin: false
-categories:
-- Project
-- Desktop Visual Timer
+categories: [Project, Desktop Visual Timer]
 tags:
 date: 2023-09-12 19:54 +0900
 ---
+
 이제 프로그램에 데이터를 저장해야 했다. 데이터 저장과 같은 횡단관심사는 별도의 레이어로 분리하는 것이 좋다. 레이어가 분리되면 데이터 저장로직이 변경되어도 Model 이나 View Model 등 다른 계층에서 코드를 변경할 일이 없거나 적어진다. 또한 데이터 저장관련 중복코드를 줄일 수 있다.
 
 개인적인 경험에 의해, 최종형태는 다음과 같기를 바랬다.

@@ -7,9 +7,7 @@ image:
   path: timetimer_unsplash.jpg
   alt: Time Timer - Unsplash의 Ralph Hutter
 pin: false
-categories:
-  - Project
-  - Desktop Visual Timer
+categories: [Project, Desktop Visual Timer]
 tags:
 date: 2023-09-06 17:09 +0900
 ---
