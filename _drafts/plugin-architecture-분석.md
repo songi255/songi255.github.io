@@ -2,7 +2,7 @@
 layout: post
 title: Plugin Architecture 분석
 description:
-img_path:
+img_path: "/assets/img"
 image:
   lqip:
   path:

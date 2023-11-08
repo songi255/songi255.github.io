@@ -6,7 +6,7 @@ img_path: "/assets/img"
 image:
   lqip:
   path:
-  alt: preview image
+  alt:
 pin: false
 categories: [Architecture, UML]
 tags:

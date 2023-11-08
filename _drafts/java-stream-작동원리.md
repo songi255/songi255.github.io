@@ -2,7 +2,7 @@
 layout: post
 title: Java Stream 작동원리
 description:
-img_path:
+img_path: "/assets/img"
 image:
   lqip:
   path:
