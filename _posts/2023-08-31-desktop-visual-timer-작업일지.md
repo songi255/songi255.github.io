@@ -4,7 +4,6 @@ title: Desktop Visual Timer 작업일지
 description: desktop visual timer project 소개
 img_path: "/assets/img/timetimer"
 image:
-  lqip:
   path: timetimer_unsplash.jpg
   alt: Time Timer - Unsplash의 Ralph Hutter
 pin: false
