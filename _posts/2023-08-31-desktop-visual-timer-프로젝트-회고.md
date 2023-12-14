@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Desktop Visual Timer"
+title: "Desktop Visual Timer 프로젝트 회고"
 description:
 img_path: "/assets/img/timetimer"
 image:
@@ -12,6 +12,7 @@ categories:
   - Desktop Visual Timer
 tags:
   - java
+  - javafx
 date: 2023-08-31 22:51 +0900
 ---
 
